@@ -1,0 +1,390 @@
+
+<!doctype html>
+<html lang="hi">
+ <!-- Changed language to Hindi -->
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>रक्षाबंधन की शुभकामनाएँ!</title><!-- Translated Title -->
+  <style>
+        /* Religious/Spiritual Theme Colors */
+        :root {
+            --bg-color: #fff3e0; /* Light Peach/Saffron */
+            --primary-color: #b71c1c; /* Deep Red/Maroon */
+            --secondary-color: #ffb300; /* Gold/Orange */
+            --text-color: #4e342e; /* Dark Brown */
+            --light-bg: #ffecb3; /* Light Gold */
+            --border-color: #ffccbc; /* Lighter Orange */
+            --whatsapp-green: #25D366;
+            --whatsapp-green-dark: #1DA851;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif; /* More common font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Full viewport height */
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            overflow-x: hidden; /* Prevent horizontal scroll due to animations */
+            position: relative; /* Needed for absolute positioning children */
+        }
+
+        #rakhiGif {
+            max-width: 100%; /* Ensure image fits on small screens */
+            height: auto;
+            margin-bottom: 20px;
+            border: 5px solid var(--secondary-color); /* Gold border */
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            background-color: white; /* Background for transparent parts of GIF */
+        }
+
+        #welcomeMessage {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: var(--light-bg); /* Light Gold background */
+            border-radius: 10px;
+            opacity: 0; /* Initially hidden */
+            transform: translateY(20px); /* Start slightly lower */
+            animation: fadeInUp 1s ease-out forwards; /* Animation on load */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #welcomeMessage h1 {
+            color: var(--primary-color); /* Deep Red */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 2.5em; /* Larger font size */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        #welcomeMessage p {
+            color: var(--text-color); /* Dark Brown */
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        #senderNameDisplay {
+            color: var(--primary-color); /* Sender name in Deep Red */
+        }
+
+        #inputSection {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Adjust width */
+            max-width: 500px; /* Max width for larger screens */
+            box-sizing: border-box; /* Include padding/border in width */
+            display: flex; /* Use flexbox for input and button */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+        }
+
+        #inputSection label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: bold;
+            color: var(--text-color);
+            font-size: 1.1em;
+            text-align: center; /* Center label text */
+        }
+
+        #userName {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%; /* Full width within container */
+            box-sizing: border-box;
+            text-align: center; /* Center input text */
+        }
+
+        /* Style for the WhatsApp Share Button */
+        #generateLinkButton { /* Kept same ID for JS */
+            display: inline-flex; /* Arrange icon and potential text side-by-side if needed */
+            align-items: center; /* Vertically align content */
+            justify-content: center; /* Center content horizontally */
+            padding: 10px 20px; /* Adjust padding */
+            background-color: var(--whatsapp-green); /* WhatsApp Green */
+            color: white; /* Icon color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            margin-top: 0; /* Remove top margin */
+            width: auto; /* Button width based on content */
+        }
+
+        #generateLinkButton:hover {
+            background-color: var(--whatsapp-green-dark); /* Darker green on hover */
+        }
+
+        #generateLinkButton svg {
+            /* WhatsApp icon size */
+            width: 30px;
+            height: 30px;
+            margin-right: 8px; /* Space between icon and text (if text is added) */
+            fill: white; /* Ensure icon is white */
+        }
+
+        #shareLinkDisplay {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e8f5e9; /* Light Green background */
+            border: 1px dashed #4caf50; /* Green dashed border */
+            border-radius: 5px;
+            word-break: break-all; /* Break long links */
+            text-align: left;
+            font-size: 0.9em;
+            color: #1b5e20; /* Dark Green color */
+            display: none; /* Initially hidden */
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        #shareLinkDisplay p {
+            margin: 0 0 5px 0;
+            font-weight: bold;
+        }
+        #shareLinkDisplay span {
+             font-weight: normal;
+             font-size: 0.9em;
+        }
+
+
+        .hidden {
+            display: none; /* Utility class to hide elements */
+        }
+
+        /* --- Flower Petal Animation --- */
+        #petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows clicks to pass through */
+            overflow: hidden; /* Hide petals falling off screen */
+            z-index: -1; /* Place behind content */
+        }
+
+        .petal {
+            position: absolute;
+            width: 10px; /* Size of petal */
+            height: 10px;
+            background-color: rgba(255, 204, 188, 0.8); /* Light Orange/Peach with transparency */
+            border-radius: 50%; /* Rounded shape */
+            opacity: 0; /* Start invisible */
+            animation: fall linear infinite; /* Animation properties */
+        }
+
+         .petal-pink {
+             background-color: rgba(248, 187, 208, 0.8); /* Light Pink with transparency */
+         }
+
+         .petal-small {
+             width: 7px;
+             height: 7px;
+         }
+
+        @keyframes fall {
+            0% {
+                transform: translate(0, -10vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                 opacity: 0.8;
+            }
+            100% {
+                transform: translate(var(--petal-translate-x), 110vh) rotate(var(--petal-rotate));
+                opacity: 0;
+            }
+        }
+
+        /* Animation Keyframes for welcome message */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+ </head>
+ <body>
+  <!-- Container for falling petals -->
+  <div id="petal-container"></div><!-- Welcome Message Section -->
+  <div id="welcomeMessage" class="hidden">
+   <h1>रक्षाबंधन की हार्दिक शुभकामनाएँ!</h1><!-- Translated Greeting -->
+   <p><span id="senderNameDisplay"></span> की ओर से</p><!-- Translated "From" -->
+  </div><!-- Rakhi GIF Image --> <img id="rakhiGif" src="rakhi.gif" alt="Rakshabandhan Animation"> <!-- Input Section for Name and Link Generation/Sharing -->
+  <div id="inputSection">
+   <label for="userName">अपनी शुभकामना का लिंक बनाने और शेयर करने के लिए यहाँ नाम लिखें:</label> <!-- Translated Label --> <input type="text" id="userName" placeholder="आपका नाम"> <!-- Translated Placeholder --> <!-- WhatsApp Share Button --> <button id="generateLinkButton"> <!-- WhatsApp SVG Icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+     <path d="M12.039 2c-5.519 0-9.999 4.48-9.999 10s4.48 10 9.999 10 10-4.48 10-10-4.48-10-10-10zm.039 17.333c-1.862 0-3.6-.501-5.053-1.374l-1.355.987.96-2.892c-.982-1.487-1.589-3.227-1.589-5.054 0-4.149 3.383-7.528 7.532-7.528 2.013 0 3.927.785 5.358 2.219s2.219 3.345 2.219 5.358c0 4.149-3.38 7.528-7.528 7.528zm4.084-5.555c-.222-.111-.817-.405-.952-.454s-.241-.074-.343.074-.395.454-.485.544-.184.111-.343.037c-.952-.347-1.9-.705-2.691-1.656-.294-.369-.655-.907-.302-1.254s.261-.314.354-.426c.1-.111.111-.185.166-.315s.012-.294-.05-.418c-.061-.126-.485-1.167-.665-1.598-.177-.421-.355-.361-.485-.369-.13-.009-.285-.012-.438-.012-.158 0-.418.056-.639.315-.222.259-.85.822-.85 2c0 1.178.878 2.286.99.407s1.694 2.594 2.446 3.158c.752.564 1.36.752 1.825.915.64.222 1.22.185 1.672.111.453-.074 1.355-.555 1.544-1.12s.192-1.04.13-1.142z" />
+    </svg> WhatsApp से शेयर करें <!-- Translated Button Text --> </button>
+  </div><!-- Display for the Generated Link (Fallback/Manual Copy) -->
+  <div id="shareLinkDisplay" class="hidden">
+   <p>आपका शेयर करने योग्य लिंक (अगर शेयर विंडो नहीं खुला तो इसका उपयोग करें):</p><!-- Translated Heading --> <span id="generatedLinkText"></span>
+   <br><span style="font-style: italic; color: #555; font-size: 0.9em;">(यह लिंक कॉपी करके मैन्युअली शेयर करें)</span> <!-- Translated Hint -->
+  </div>
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessageDiv = document.getElementById('welcomeMessage');
+            const senderNameSpan = document.getElementById('senderNameDisplay');
+            const userNameInput = document.getElementById('userName');
+            const generateLinkButton = document.getElementById('generateLinkButton'); // Still using this ID
+            const shareLinkDisplayDiv = document.getElementById('shareLinkDisplay');
+            const generatedLinkSpan = document.getElementById('generatedLinkText');
+            const petalContainer = document.getElementById('petal-container');
+
+            const PETAL_COUNT = 120; // Increased petal count (same as previous version)
+
+            // --- Handle Incoming Link with Name ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const senderName = urlParams.get('name');
+
+            if (senderName) {
+                // If name is present in URL, display the welcome message
+                senderNameSpan.textContent = decodeURIComponent(senderName); // Decode the name
+                welcomeMessageDiv.classList.remove('hidden'); // Show message div
+
+                // Start the flower animation effect
+                createFallingPetals(PETAL_COUNT);
+            } else {
+                // If no name, hide the welcome message initially
+                 welcomeMessageDiv.classList.add('hidden');
+            }
+
+            // --- Flower Petal Animation Function ---
+            function createFallingPetals(numberOfPetals) {
+                 if (!petalContainer) return; // Safety check
+
+                 for (let i = 0; i < numberOfPetals; i++) {
+                    setTimeout(function() {
+                        // Check if petal container still exists before adding
+                        if (!document.body.contains(petalContainer)) return;
+
+                        const petal = document.createElement('div');
+                        petal.classList.add('petal');
+
+                        // Randomize color and size
+                        if (Math.random() > 0.5) {
+                           petal.classList.add('petal-pink');
+                        }
+                         if (Math.random() > 0.6) { // Make smaller petals less common
+                            petal.classList.add('petal-small');
+                         }
+
+                        // Randomize start position (horizontal)
+                        const startLeft = Math.random() * 100; // 0 to 100vw
+                        petal.style.left = startLeft + 'vw';
+
+                        // Randomize animation duration
+                        const duration = Math.random() * 10 + 8; // 8 to 18 seconds
+                        petal.style.animationDuration = duration + 's';
+
+                        // Randomize animation delay (stagger the start times)
+                        const delay = Math.random() * 15; // 0 to 15 seconds delay
+                         petal.style.animationDelay = delay + 's';
+
+                        // Randomize horizontal movement and rotation during fall
+                        const translateX = (Math.random() - 0.5) * 50; // -25vw to +25vw horizontal sway
+                        const rotateDeg = Math.random() * 720; // 0 to 720 degrees rotation
+
+                        // Set CSS variables for animation
+                        petal.style.setProperty('--petal-translate-x', translateX + 'vw');
+                        petal.style.setProperty('--petal-rotate', rotateDeg + 'deg');
+
+                        // Remove the petal after animation ends to prevent memory leak
+                        petal.addEventListener('animationend', function() {
+                             if (petal.parentNode === petalContainer) { // Check if it's still in the container
+                                 petalContainer.removeChild(petal);
+                             }
+                        });
+
+                        petalContainer.appendChild(petal);
+                    }, i * 200); // Stagger creation slightly
+                 }
+            }
+
+
+            // --- Link Generation and Sharing ---
+            generateLinkButton.addEventListener('click', async function() { // Made async
+                const enteredName = userNameInput.value.trim(); // Get name and remove spaces
+
+                if (enteredName === "") {
+                    alert("कृपया पहले अपना नाम लिखें!"); // Translated Alert
+                    return; // Stop if name is empty
+                }
+
+                // Get the base URL of the current page
+                const baseUrl = window.location.origin + window.location.pathname;
+
+                // Encode the name to be safe in the URL
+                const encodedName = encodeURIComponent(enteredName);
+
+                // Create the shareable link
+                const shareUrl = baseUrl + '?name=' + encodedName;
+
+                // Craft the Hindi wish message for sharing
+                const shareText = `भाई-बहन के प्यार और विश्वास के अटूट बंधन, रक्षाबंधन के पावन पर्व की आपको बहुत-बहुत शुभकामनाएँ! 🎉\n\n${enteredName} की ओर से यह प्यारा संदेश देखिए:\n`; // Hindi Wish + Sender Name
+
+                // --- Attempt to use Web Share API ---
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'रक्षाबंधन की शुभकामनाएँ!', // Translated Share Title
+                            text: shareText, // Hindi Wish Text
+                            url: shareUrl
+                        });
+                        console.log('Shared successfully');
+                        // Optionally hide the manual link display if successful
+                        // shareLinkDisplayDiv.classList.add('hidden');
+
+                    } catch (error) {
+                        console.error('Error sharing or share cancelled:', error);
+                        // If sharing fails or is cancelled, fall back to displaying the link manually
+                        generatedLinkSpan.textContent = shareUrl;
+                        shareLinkDisplayDiv.classList.remove('hidden');
+                    }
+                } else {
+                    // Fallback: Construct a basic WhatsApp Web/App share URL if Web Share API is not supported
+                    // Note: This is a basic fallback, not as universal as navigator.share
+                     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + shareUrl)}`;
+                     window.open(whatsappUrl, '_blank'); // Open in a new tab/window
+
+                    console.log('Web Share API not supported, attempting WhatsApp URL or displaying link manually.');
+                    // Still display the link manually as a backup
+                    generatedLinkSpan.textContent = shareUrl;
+                    shareLinkDisplayDiv.classList.remove('hidden');
+                }
+            });
+
+            // Allow pressing Enter in the input field to trigger the button click
+            userNameInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent default form submission
+                    generateLinkButton.click(); // Trigger button click
+                }
+            });
+
+        });
+    </script>
+ </body>
+</html>
